@@ -1,5 +1,4 @@
 import { pgTable, text, integer, boolean } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const teams = pgTable("teams", {
@@ -12,6 +11,13 @@ export const teams = pgTable("teams", {
   pokemon: text("pokemon").notNull(), // JSON stringified array
 });
 
-export const insertTeamSchema = createInsertSchema(teams).omit({ id: true });
+export const insertTeamSchema = z.object({
+  name: z.string(),
+  generation: z.string(),
+  game: z.string(),
+  mode: z.string(),
+  hmRulesEnabled: z.boolean().default(false),
+  pokemon: z.string(),
+});
 export type InsertTeam = z.infer<typeof insertTeamSchema>;
 export type Team = typeof teams.$inferSelect;
