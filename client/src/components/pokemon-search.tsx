@@ -97,7 +97,7 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
         <Input
           ref={inputRef}
           data-testid="pokemon-search-input"
-          placeholder="Search Pokemon by name or #..."
+          placeholder="Search Pokémon by name or #..."
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => {
@@ -121,7 +121,7 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
               <div className="p-3 text-xs text-muted-foreground text-center">Searching...</div>
             )}
             {!loading && results.length === 0 && query && (
-              <div className="p-3 text-xs text-muted-foreground text-center">No Pokemon found</div>
+              <div className="p-3 text-xs text-muted-foreground text-center">No Pokémon found</div>
             )}
             {results.map(p => (
               <button

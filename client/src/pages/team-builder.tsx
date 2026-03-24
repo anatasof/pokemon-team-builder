@@ -66,47 +66,47 @@ export default function TeamBuilder() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
               <svg viewBox="0 0 24 24" className="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="2" y1="12" x2="22" y2="12" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </div>
-            <div>
-              <h1 className="text-base font-semibold tracking-tight">Pokemon Team Builder</h1>
-              <p className="text-xs text-muted-foreground">{currentGen.name} · {currentGen.region}</p>
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-base font-semibold tracking-tight truncate">Pokémon Team Builder</h1>
+              <p className="text-xs text-muted-foreground truncate hidden sm:block">{currentGen.name} · {currentGen.region}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {/* Mode Toggle */}
-            <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-3 py-1.5">
+            <div className="flex items-center gap-1 sm:gap-2 bg-muted/50 rounded-lg px-2 sm:px-3 py-1.5">
               <button
                 data-testid="mode-playthrough"
                 onClick={() => setMode("playthrough")}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                  mode === "playthrough" 
-                    ? "bg-background text-foreground shadow-sm" 
+                className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                  mode === "playthrough"
+                    ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Map className="w-3.5 h-3.5" />
-                Playthrough
+                <Map className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline">Playthrough</span>
               </button>
               <button
                 data-testid="mode-competitive"
                 onClick={() => setMode("competitive")}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                  mode === "competitive" 
-                    ? "bg-background text-foreground shadow-sm" 
+                className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                  mode === "competitive"
+                    ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Swords className="w-3.5 h-3.5" />
-                Competitive
+                <Swords className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline">Competitive</span>
               </button>
             </div>
 
@@ -129,10 +129,10 @@ export default function TeamBuilder() {
 
         {/* HM Rules Toggle (Playthrough mode only) */}
         {mode === "playthrough" && hasHMs && (
-          <div className="flex items-center justify-between bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-primary" />
-              <div>
+          <div className="flex items-center justify-between bg-card rounded-lg border border-border p-4 gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <Shield className="w-5 h-5 text-primary shrink-0" />
+              <div className="min-w-0">
                 <Label className="text-sm font-medium">HM Coverage Rules</Label>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Require all HMs to be covered across team members for {currentGame.name}

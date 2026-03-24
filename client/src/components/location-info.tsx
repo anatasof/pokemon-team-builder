@@ -46,7 +46,7 @@ export default function LocationInfo({ pokemon, game, generation }: Props) {
       ) : (
         <div className="text-xs text-muted-foreground bg-muted/30 rounded-lg p-3">
           <p>Location data not available for this game version.</p>
-          <p className="mt-1.5">This Pokemon may be obtainable through:</p>
+          <p className="mt-1.5">This Pokémon may be obtainable through:</p>
           <ul className="mt-1 space-y-0.5 text-[10px]">
             <li>• Evolution from a pre-evolution</li>
             <li>• Trading from another game</li>

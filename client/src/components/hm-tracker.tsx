@@ -61,7 +61,7 @@ export default function HMTracker({ requiredHMs, hmCoverage, gameName }: Props) 
 
       {hmCoverage.missing.length > 0 && (
         <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2">
-          Missing: {hmCoverage.missing.join(", ")}. Add Pokemon with these moves to complete your playthrough team.
+          Missing: {hmCoverage.missing.join(", ")}. Add Pokémon with these moves to complete your playthrough team.
         </p>
       )}
     </div>

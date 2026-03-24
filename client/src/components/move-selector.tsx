@@ -195,7 +195,7 @@ export default function MoveSelector({
           <div className="max-h-[250px] overflow-y-auto">
             {filteredMoves.length === 0 && (
               <div className="p-2.5 text-xs text-muted-foreground text-center">
-                {availableMoves.length === 0 ? "Select a Pokemon first" : "No moves found"}
+                {availableMoves.length === 0 ? "Select a Pokémon first" : "No moves found"}
               </div>
             )}
             {filteredMoves.slice(0, 50).map((m, i) => {

@@ -42,7 +42,7 @@ export default function TeamComments({ team, coverage, mode, hmCoverage, require
     } else if (hmCoverage.missing.length > 0) {
       comments.push({
         type: "warning",
-        text: `Your team is missing HMs: ${hmCoverage.missing.join(", ")}. You'll need additional Pokemon or an HM slave for progression.`,
+        text: `Your team is missing HMs: ${hmCoverage.missing.join(", ")}. You'll need additional Pokémon or an HM slave for progression.`,
       });
     }
   }
@@ -104,13 +104,13 @@ export default function TeamComments({ team, coverage, mode, hmCoverage, require
     if (allPhysical) {
       comments.push({
         type: "warning",
-        text: "All your Pokemon are physically-oriented. A special attacker would help against physically defensive opponents.",
+        text: "All your Pokémon are physically-oriented. A special attacker would help against physically defensive opponents.",
       });
     }
     if (allSpecial) {
       comments.push({
         type: "warning",
-        text: "All your Pokemon are specially-oriented. A physical attacker would help against specially defensive opponents.",
+        text: "All your Pokémon are specially-oriented. A physical attacker would help against specially defensive opponents.",
       });
     }
   }
@@ -118,7 +118,7 @@ export default function TeamComments({ team, coverage, mode, hmCoverage, require
   if (activePokemon.length < 3) {
     comments.push({
       type: "info",
-      text: "Add more Pokemon to see team coverage analysis and recommendations.",
+      text: "Add more Pokémon to see team coverage analysis and recommendations.",
     });
   }
 
@@ -145,7 +145,7 @@ export default function TeamComments({ team, coverage, mode, hmCoverage, require
           </div>
         ))}
         {comments.length === 0 && (
-          <p className="text-xs text-muted-foreground">Select Pokemon and moves to see team analysis.</p>
+          <p className="text-xs text-muted-foreground">Select Pokémon and moves to see team analysis.</p>
         )}
       </div>
     </div>

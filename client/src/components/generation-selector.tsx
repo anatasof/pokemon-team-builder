@@ -48,7 +48,7 @@ export default function GenerationSelector({ generation, game, onGenerationChang
       <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2.5">
         <span>Pokedex: #{currentGen.dexRange[0]} — #{currentGen.dexRange[1]}</span>
         <span className="text-border">|</span>
-        <span>{currentGen.totalNew} new Pokemon</span>
+        <span>{currentGen.totalNew} new Pokémon</span>
         {currentGen.games.find(g => g.id === game)?.hmMoves.length ? (
           <>
             <span className="text-border">|</span>
