@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { searchPokemon, getPokemonForGeneration, formatPokemonName } from "@/lib/pokeapi";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -15,7 +16,10 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [genPokemon, setGenPokemon] = useState<Array<{ name: string; id: number; sprite: string }>>([]);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Load generation pokemon list
@@ -55,10 +59,31 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
     }, 200);
   }, [genPokemon]);
 
+  const updatePos = useCallback(() => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!showDropdown) return;
+    updatePos();
+    window.addEventListener("scroll", updatePos, true);
+    window.addEventListener("resize", updatePos);
+    return () => {
+      window.removeEventListener("scroll", updatePos, true);
+      window.removeEventListener("resize", updatePos);
+    };
+  }, [showDropdown, updatePos]);
+
   // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current && !containerRef.current.contains(e.target as Node) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(e.target as Node))
+      ) {
         setShowDropdown(false);
       }
     };
@@ -71,6 +96,7 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
       <div className="relative">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
         <Input
+          ref={inputRef}
           data-testid="pokemon-search-input"
           placeholder="Search Pokemon by name or #..."
           value={query}
@@ -85,8 +111,12 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
         />
       </div>
 
-      {showDropdown && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+      {showDropdown && dropdownPos && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{ position: "fixed", top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
+          className="bg-popover border border-border rounded-lg shadow-lg overflow-hidden"
+        >
           <ScrollArea className="max-h-[280px]">
             {loading && (
               <div className="p-3 text-xs text-muted-foreground text-center">Searching...</div>
@@ -119,7 +149,8 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
               </button>
             ))}
           </ScrollArea>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
