@@ -190,7 +190,7 @@ export default function TeamBuilder() {
       </main>
 
       <footer className="border-t border-border mt-12 py-6">
-        <div className="mx-auto max-w-7xl px-4 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted-foreground">
           <p>
             Data from{" "}
             <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">

@@ -357,12 +357,12 @@ function generateCoverageComments(
   const comments: string[] = [];
 
   if (uncovered.length > 0) {
-    comments.push(`Your team lacks super-effective coverage against: ${uncovered.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}. Consider adding a Pokemon with moves that hit these types.`);
+    comments.push(`Your team lacks super-effective coverage against: ${uncovered.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}. Consider adding a Pokémon with moves that hit these types.`);
   }
 
   const majorWeaknesses = allTypes.filter(t => weaknesses[t] >= 3);
   if (majorWeaknesses.length > 0) {
-    comments.push(`Major team weakness: ${majorWeaknesses.length} or more Pokemon are weak to ${majorWeaknesses.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}. This could be exploited by opponents.`);
+    comments.push(`Major team weakness: ${majorWeaknesses.length} or more Pokémon are weak to ${majorWeaknesses.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}. This could be exploited by opponents.`);
   }
 
   const strongResists = allTypes.filter(t => resistances[t] >= 3 || immunities[t] >= 1);
@@ -383,7 +383,7 @@ function generateCoverageComments(
 
   const noResistances = allTypes.filter(t => resistances[t] === 0 && immunities[t] === 0);
   if (noResistances.length > 5) {
-    comments.push(`Your team has no resistances to: ${noResistances.slice(0, 5).map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}${noResistances.length > 5 ? ` and ${noResistances.length - 5} more` : ""}. Consider Pokemon that resist these types.`);
+    comments.push(`Your team has no resistances to: ${noResistances.slice(0, 5).map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(", ")}${noResistances.length > 5 ? ` and ${noResistances.length - 5} more` : ""}. Consider Pokémon that resist these types.`);
   }
 
   return comments;
