@@ -1,4 +1,6 @@
 // PokeAPI service layer with caching
+import { GENERATIONS } from "./pokemon-data";
+
 const API_BASE = "https://pokeapi.co/api/v2";
 const cache = new Map<string, any>();
 
@@ -244,7 +246,7 @@ export async function getPokemonForGeneration(genId: number): Promise<Array<{ na
     }
     const allPokemon = cache.get("pokemon-list-full") as Array<{ name: string; url: string }>;
     
-    const gen = (await import("./pokemon-data")).GENERATIONS.find(g => g.id === genId);
+    const gen = GENERATIONS.find(g => g.id === genId);
     if (!gen) return [];
     
     const results = allPokemon
