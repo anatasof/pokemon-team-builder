@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { searchPokemon, getPokemonForGeneration, formatPokemonName } from "@/lib/pokeapi";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "lucide-react";
 
 interface Props {
@@ -117,7 +116,7 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
           style={{ position: "fixed", top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
           className="bg-popover border border-border rounded-lg shadow-lg overflow-hidden"
         >
-          <ScrollArea className="max-h-[280px]">
+          <div className="max-h-[280px] overflow-y-auto">
             {loading && (
               <div className="p-3 text-xs text-muted-foreground text-center">Searching...</div>
             )}
@@ -148,7 +147,7 @@ export default function PokemonSearch({ generation, onSelect }: Props) {
                 </div>
               </button>
             ))}
-          </ScrollArea>
+          </div>
         </div>,
         document.body
       )}
