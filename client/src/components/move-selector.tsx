@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { type MoveSlot, TYPE_COLORS } from "@/lib/pokemon-data";
 import { getMoveDetails, formatMoveName, getVersionGroupForGame } from "@/lib/pokeapi";
 import { Input } from "@/components/ui/input";
@@ -37,7 +38,10 @@ export default function MoveSelector({
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredMoves, setFilteredMoves] = useState(availableMoves);
   const [moveDetails, setMoveDetails] = useState<Map<string, any>>(new Map());
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -50,10 +54,31 @@ export default function MoveSelector({
     );
   }, [query, availableMoves]);
 
+  const updatePos = useCallback(() => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!showDropdown) return;
+    updatePos();
+    window.addEventListener("scroll", updatePos, true);
+    window.addEventListener("resize", updatePos);
+    return () => {
+      window.removeEventListener("scroll", updatePos, true);
+      window.removeEventListener("resize", updatePos);
+    };
+  }, [showDropdown, updatePos]);
+
   // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current && !containerRef.current.contains(e.target as Node) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(e.target as Node))
+      ) {
         setShowDropdown(false);
       }
     };
@@ -153,6 +178,7 @@ export default function MoveSelector({
   return (
     <div ref={containerRef} className="relative">
       <Input
+        ref={inputRef}
         data-testid={`move-search-${moveIndex}`}
         placeholder={`Move ${moveIndex + 1}...`}
         value={query}
@@ -161,8 +187,12 @@ export default function MoveSelector({
         className="h-8 text-xs"
       />
 
-      {showDropdown && (
-        <div className="absolute z-40 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+      {showDropdown && dropdownPos && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{ position: "fixed", top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
+          className="bg-popover border border-border rounded-lg shadow-lg overflow-hidden"
+        >
           <ScrollArea className="max-h-[250px]">
             {filteredMoves.length === 0 && (
               <div className="p-2.5 text-xs text-muted-foreground text-center">
@@ -193,7 +223,8 @@ export default function MoveSelector({
               );
             })}
           </ScrollArea>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
