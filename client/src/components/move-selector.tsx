@@ -4,7 +4,6 @@ import { type MoveSlot, TYPE_COLORS } from "@/lib/pokemon-data";
 import { getMoveDetails, formatMoveName, getVersionGroupForGame } from "@/lib/pokeapi";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { X, Zap, Shield, Target } from "lucide-react";
 
 interface Props {
@@ -193,7 +192,7 @@ export default function MoveSelector({
           style={{ position: "fixed", top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
           className="bg-popover border border-border rounded-lg shadow-lg overflow-hidden"
         >
-          <ScrollArea className="max-h-[250px]">
+          <div className="max-h-[250px] overflow-y-auto">
             {filteredMoves.length === 0 && (
               <div className="p-2.5 text-xs text-muted-foreground text-center">
                 {availableMoves.length === 0 ? "Select a Pokemon first" : "No moves found"}
@@ -222,7 +221,7 @@ export default function MoveSelector({
                 </button>
               );
             })}
-          </ScrollArea>
+          </div>
         </div>,
         document.body
       )}
