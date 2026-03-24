@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Swords, Map, Shield } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import AppFooter from "@/components/app-footer";
 
 export default function TeamBuilder() {
   const [generation, setGeneration] = useState(1);
@@ -189,20 +190,7 @@ export default function TeamBuilder() {
         )}
       </main>
 
-      <footer className="border-t border-border mt-12 py-6">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted-foreground">
-          <p>
-            Data from{" "}
-            <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
-              PokéAPI
-            </a>
-            . Pokémon is a trademark of Nintendo/Game Freak.
-          </p>
-          <a href="https://instagram.com/anatasof" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-            © 2026 @anatasof
-          </a>
-        </div>
-      </footer>
+      <AppFooter />
     </div>
   );
 }
