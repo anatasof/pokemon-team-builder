@@ -406,9 +406,9 @@
   backdrop-filter: blur(0px);
   filter: url(#navbar-glass);
   /* Semi-transparent fill so content below is still readable */
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .dark .liquid-glass-nav::after {
-  background: rgba(12, 14, 22, 0.55);
+  background: rgba(12, 14, 22, 0.75);
 }
