@@ -363,3 +363,53 @@
     inset: -1px;
   }
 }
+
+/* ─── Liquid Glass Navbar ─────────────────────────────────────────────────── */
+
+.liquid-glass-nav {
+  position: relative;
+  isolation: isolate;
+  /* Remove opaque bg – the glass pseudo-element provides the background */
+  background: transparent !important;
+  border-bottom: none;
+  /* Subtle bottom line */
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.06);
+}
+
+.dark .liquid-glass-nav {
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Inner highlight — gives the top-edge "glass rim" look */
+.liquid-glass-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7),
+    inset 0 0 3px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* Liquid-glass backdrop — displacement filter + semi-transparent fill */
+.liquid-glass-nav::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  isolation: isolate;
+  /* backdrop-filter: blur(0px) makes the browser capture the painted area
+     behind this element as SourceGraphic, which the SVG displacement filter
+     then distorts to produce the liquid-lens / ripple effect. */
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
+  filter: url(#navbar-glass);
+  /* Semi-transparent fill so content below is still readable */
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.dark .liquid-glass-nav::after {
+  background: rgba(12, 14, 22, 0.55);
+}

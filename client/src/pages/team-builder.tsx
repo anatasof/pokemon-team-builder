@@ -65,9 +65,19 @@ export default function TeamBuilder() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+
+      {/* Hidden SVG filters for liquid-glass effect */}
+      <svg style={{ display: 'none' }} aria-hidden="true">
+        <filter id="navbar-glass" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="0.02" result="blur" />
+          <feDisplacementMap in="SourceGraphic" in2="blur" scale="77" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <header className="liquid-glass-nav sticky top-0 z-50">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
               <svg viewBox="0 0 24 24" className="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" strokeWidth="2.5">
