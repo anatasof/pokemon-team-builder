@@ -368,10 +368,8 @@
 
 .liquid-glass-nav {
   isolation: isolate;
-  /* Remove opaque bg – the glass pseudo-element provides the background */
   background: transparent !important;
   border-bottom: none;
-  /* Subtle bottom line */
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.06);
 }
 
@@ -379,39 +377,47 @@
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04);
 }
 
-/* Glass tint + inner rim highlight.
-   Matching the CodePen pattern: background opacity lives HERE so it
-   works as a reliable fallback on Safari where the ::after filter
-   combo can be unreliable. */
+/* Rim highlight only — no background-color (tint lives on .liquid-glass-blur) */
 .liquid-glass-nav::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background-color: rgba(255, 255, 255, 0.55);
   box-shadow:
     inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7),
     inset 0 0 3px 1px rgba(255, 255, 255, 0.25);
 }
 
-.dark .liquid-glass-nav::before {
-  background-color: rgba(12, 14, 22, 0.75);
-}
+/* ::after removed — replaced by .liquid-glass-distort + .liquid-glass-blur */
 
-/* Liquid-glass displacement layer — no background tint here.
-   backdrop-filter: blur(0px) forces the browser to sample the backdrop
-   as SourceGraphic; the SVG filter then distorts it for the liquid-lens
-   ripple. On Safari where this combo fails, ::before's tint takes over. */
-.liquid-glass-nav::after {
-  content: '';
+/*
+ * Parent: SVG displacement filter ONLY.
+ * Must NOT have backdrop-filter — that is the Safari fix.
+ * The child (.liquid-glass-blur) renders the blurred/tinted backdrop,
+ * and that painted output becomes SourceGraphic for this filter.
+ */
+.liquid-glass-distort {
   position: absolute;
   inset: 0;
   z-index: -1;
+  pointer-events: none;
   overflow: hidden;
-  isolation: isolate;
+  filter: url(#navbar-glass);
+}
+
+/*
+ * Child: backdrop-filter + tint ONLY.
+ * Must NOT have a CSS filter — keeping these separated is the Safari fix.
+ */
+.liquid-glass-blur {
+  position: absolute;
+  inset: 0;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
-  filter: url(#navbar-glass);
-  background: transparent;
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.dark .liquid-glass-blur {
+  background-color: rgba(12, 14, 22, 0.75);
 }

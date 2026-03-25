@@ -77,6 +77,11 @@ export default function TeamBuilder() {
 
       {/* Header */}
       <header className="liquid-glass-nav sticky top-0 z-50">
+        {/* Safari-compatible liquid glass: SVG filter on parent, backdrop-filter on child.
+            Putting both on the same element breaks backdrop sampling in Safari. */}
+        <div className="liquid-glass-distort" aria-hidden="true">
+          <div className="liquid-glass-blur" />
+        </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
