@@ -379,19 +379,30 @@
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04);
 }
 
-/* Inner highlight — gives the top-edge "glass rim" look */
+/* Glass tint + inner rim highlight.
+   Matching the CodePen pattern: background opacity lives HERE so it
+   works as a reliable fallback on Safari where the ::after filter
+   combo can be unreliable. */
 .liquid-glass-nav::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.55);
   box-shadow:
     inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7),
     inset 0 0 3px 1px rgba(255, 255, 255, 0.25);
 }
 
-/* Liquid-glass backdrop — displacement filter + semi-transparent fill */
+.dark .liquid-glass-nav::before {
+  background-color: rgba(12, 14, 22, 0.75);
+}
+
+/* Liquid-glass displacement layer — no background tint here.
+   backdrop-filter: blur(0px) forces the browser to sample the backdrop
+   as SourceGraphic; the SVG filter then distorts it for the liquid-lens
+   ripple. On Safari where this combo fails, ::before's tint takes over. */
 .liquid-glass-nav::after {
   content: '';
   position: absolute;
@@ -399,16 +410,8 @@
   z-index: -1;
   overflow: hidden;
   isolation: isolate;
-  /* backdrop-filter: blur(0px) makes the browser capture the painted area
-     behind this element as SourceGraphic, which the SVG displacement filter
-     then distorts to produce the liquid-lens / ripple effect. */
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
   filter: url(#navbar-glass);
-  /* Semi-transparent fill so content below is still readable */
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.dark .liquid-glass-nav::after {
-  background: rgba(12, 14, 22, 0.75);
+  background: transparent;
 }
