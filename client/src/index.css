@@ -377,47 +377,44 @@
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04);
 }
 
-/* Rim highlight only — no background-color (tint lives on .liquid-glass-blur) */
+/*
+ * Glass tint + inner rim highlight.
+ * Background opacity lives here so it is always visible — including on
+ * Safari where the ::after filter+backdrop combo does not compose.
+ */
 .liquid-glass-nav::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.55);
   box-shadow:
     inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7),
     inset 0 0 3px 1px rgba(255, 255, 255, 0.25);
 }
 
-/* ::after removed — replaced by .liquid-glass-distort + .liquid-glass-blur */
+.dark .liquid-glass-nav::before {
+  background-color: rgba(12, 14, 22, 0.75);
+}
 
 /*
- * Parent: SVG displacement filter ONLY.
- * Must NOT have backdrop-filter — that is the Safari fix.
- * The child (.liquid-glass-blur) renders the blurred/tinted backdrop,
- * and that painted output becomes SourceGraphic for this filter.
+ * Liquid-glass displacement layer.
+ * Chrome/Firefox: backdrop-filter captures the page content behind the
+ * navbar; the SVG displacement filter then distorts it for the liquid
+ * ripple effect.
+ * Safari: this combination does not compose — Safari shows only the
+ * ::before tint above as a frosted-glass fallback instead.
  */
-.liquid-glass-distort {
+.liquid-glass-nav::after {
+  content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  pointer-events: none;
   overflow: hidden;
-  filter: url(#navbar-glass);
-}
-
-/*
- * Child: backdrop-filter + tint ONLY.
- * Must NOT have a CSS filter — keeping these separated is the Safari fix.
- */
-.liquid-glass-blur {
-  position: absolute;
-  inset: 0;
+  isolation: isolate;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
-  background-color: rgba(255, 255, 255, 0.55);
-}
-
-.dark .liquid-glass-blur {
-  background-color: rgba(12, 14, 22, 0.75);
+  filter: url(#navbar-glass);
+  background: transparent;
 }
