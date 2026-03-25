@@ -367,7 +367,6 @@
 /* ─── Liquid Glass Navbar ─────────────────────────────────────────────────── */
 
 .liquid-glass-nav {
-  position: relative;
   isolation: isolate;
   /* Remove opaque bg – the glass pseudo-element provides the background */
   background: transparent !important;
