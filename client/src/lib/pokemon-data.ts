@@ -282,6 +282,12 @@ export function getGamesByGeneration(genId: number): Game[] {
   return gen?.games || [];
 }
 
+export function isPokemonAvailableInGeneration(pokemonId: number, genId: number): boolean {
+  const gen = GENERATIONS.find(g => g.id === genId);
+  if (!gen) return true;
+  return pokemonId >= gen.dexRange[0] && pokemonId <= gen.dexRange[1];
+}
+
 export function getHMsForGame(gameId: string): string[] {
   for (const gen of GENERATIONS) {
     const game = gen.games.find(g => g.id === gameId);

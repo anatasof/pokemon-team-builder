@@ -4,7 +4,7 @@ import { type MoveSlot, TYPE_COLORS } from "@/lib/pokemon-data";
 import { getMoveDetails, formatMoveName, getVersionGroupForGame } from "@/lib/pokeapi";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { X, Zap, Shield, Target } from "lucide-react";
+import { X, Zap, Shield, Target, AlertTriangle } from "lucide-react";
 
 interface Props {
   moveIndex: number;
@@ -139,9 +139,14 @@ export default function MoveSelector({
   // Current move display
   if (currentMove?.name) {
     const CatIcon = CATEGORY_ICONS[currentMove.category] || Zap;
+    const isMoveAvailable = availableMoves.length === 0 ||
+      availableMoves.some(m => formatMoveName(m.name) === currentMove.name);
     return (
-      <div className="flex items-center gap-2 bg-muted/30 rounded-lg p-2.5 group">
+      <div className={`flex items-center gap-2 rounded-lg p-2.5 group ${isMoveAvailable ? "bg-muted/30" : "bg-amber-500/10"}`}>
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          {!isMoveAvailable && (
+            <AlertTriangle className="w-3 h-3 text-amber-500 shrink-0" />
+          )}
           <Badge
             className="text-[9px] px-1.5 py-0 h-4 text-white border-0 shrink-0"
             style={{ backgroundColor: TYPE_COLORS[currentMove.type] || "#888" }}
@@ -152,6 +157,9 @@ export default function MoveSelector({
           <span className="text-xs font-medium truncate">{currentMove.name}</span>
           {currentMove.isHM && (
             <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-primary/50 text-primary shrink-0">HM</Badge>
+          )}
+          {!isMoveAvailable && (
+            <span className="text-[9px] text-amber-500 font-medium shrink-0">unavailable</span>
           )}
         </div>
         <div className="flex items-center gap-2 text-[10px] text-muted-foreground shrink-0">

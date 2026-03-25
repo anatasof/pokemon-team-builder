@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { type PokemonSlot, type MoveSlot, NATURES, TYPE_COLORS, computeMoveCoverage } from "@/lib/pokemon-data";
+import { type PokemonSlot, type MoveSlot, NATURES, TYPE_COLORS, computeMoveCoverage, isPokemonAvailableInGeneration, GENERATIONS } from "@/lib/pokemon-data";
 import {
   getPokemonDetails, getSpeciesDetails, getPokemonEncounters, getMoveDetails,
   searchPokemon, formatPokemonName, formatMoveName, formatLocationName,
@@ -13,7 +13,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { X, ChevronDown, ChevronUp, Info, Swords, MapPin, Sparkles } from "lucide-react";
+import { X, ChevronDown, ChevronUp, Info, Swords, MapPin, Sparkles, AlertTriangle } from "lucide-react";
 
 interface Props {
   index: number;
@@ -39,6 +39,13 @@ export default function PokemonCard({
   }>>([]);
 
   const versionGroup = getVersionGroupForGame(game);
+
+  // Reload available moves whenever the pokemon or game changes
+  useEffect(() => {
+    if (!rawPokemon) { setAvailableMoves([]); return; }
+    const vg = getVersionGroupForGame(game);
+    getPokemonMovesForGame(rawPokemon, vg).then(setAvailableMoves);
+  }, [rawPokemon, game]);
 
   const handleSelectPokemon = useCallback(async (name: string, id: number) => {
     setLoading(true);
@@ -89,10 +96,6 @@ export default function PokemonCard({
             .join(", "),
         }));
 
-      // Get moves for this version group
-      const moves = await getPokemonMovesForGame(details, versionGroup);
-      setAvailableMoves(moves);
-
       onUpdate({
         ...pokemon,
         id,
@@ -129,6 +132,7 @@ export default function PokemonCard({
 
   const moveCoverage = computeMoveCoverage(pokemon.moves);
   const coveredTypes = Object.entries(moveCoverage).filter(([_, v]) => v > 0).map(([k]) => k);
+  const isPokemonInGen = isPokemonAvailableInGeneration(pokemon.id, generation);
 
   return (
     <Card className="bg-card border border-border overflow-hidden">
@@ -147,9 +151,15 @@ export default function PokemonCard({
           />
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-sm">{pokemon.name}</span>
             <span className="text-xs text-muted-foreground">#{pokemon.id}</span>
+            {!isPokemonInGen && (
+              <span className="flex items-center gap-1 text-[10px] text-amber-500 font-medium">
+                <AlertTriangle className="w-3 h-3" />
+                Not in Gen {generation}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-1.5 mt-1">
             {pokemon.types.map(type => (
@@ -251,6 +261,7 @@ export default function PokemonCard({
               <NatureIVEditor
                 pokemon={pokemon}
                 mode={mode}
+                generation={generation}
                 onUpdate={onUpdate}
               />
             </TabsContent>

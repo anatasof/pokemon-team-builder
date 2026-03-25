@@ -37,12 +37,10 @@ export default function TeamBuilder() {
     setGeneration(genId);
     const gen = GENERATIONS.find(g => g.id === genId)!;
     setGame(gen.games[0].id);
-    setTeam(Array.from({ length: 6 }, () => getEmptyPokemonSlot()));
   }, []);
 
   const handleGameChange = useCallback((gameId: string) => {
     setGame(gameId);
-    setTeam(Array.from({ length: 6 }, () => getEmptyPokemonSlot()));
   }, []);
 
   const handlePokemonUpdate = useCallback((index: number, pokemon: PokemonSlot) => {

@@ -3,10 +3,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { AlertTriangle } from "lucide-react";
 
 interface Props {
   pokemon: PokemonSlot;
   mode: "playthrough" | "competitive";
+  generation: number;
   onUpdate: (pokemon: PokemonSlot) => void;
 }
 
@@ -24,7 +26,7 @@ const NATURE_STAT_MAP: Record<string, string> = {
   spAtk: "Sp. Atk", spDef: "Sp. Def", speed: "Speed",
 };
 
-export default function NatureIVEditor({ pokemon, mode, onUpdate }: Props) {
+export default function NatureIVEditor({ pokemon, mode, generation, onUpdate }: Props) {
   const currentNature = NATURES.find(n => n.name === pokemon.nature) || NATURES[0];
 
   const getNatureMultiplier = (statKey: string): number => {
@@ -63,6 +65,12 @@ export default function NatureIVEditor({ pokemon, mode, onUpdate }: Props) {
             ))}
           </SelectContent>
         </Select>
+        {generation < 3 && (
+          <p className="text-[10px] text-amber-500 mt-1 flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3 shrink-0" />
+            Natures were introduced in Gen 3
+          </p>
+        )}
       </div>
 
       {/* Base Stats */}
