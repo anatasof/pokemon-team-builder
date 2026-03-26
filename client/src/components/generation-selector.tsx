@@ -1,5 +1,5 @@
 import { GENERATIONS } from "@/lib/pokemon-data";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Props {
   generation: number;
@@ -11,35 +11,30 @@ interface Props {
 export default function GenerationSelector({ generation, game, onGenerationChange, onGameChange }: Props) {
   const currentGen = GENERATIONS.find(g => g.id === generation)!;
 
+  function handleGameChange(gameId: string) {
+    const gen = GENERATIONS.find(g => g.games.some(gm => gm.id === gameId))!;
+    onGenerationChange(gen.id);
+    onGameChange(gameId);
+  }
+
   return (
     <div className="flex flex-wrap items-end gap-4">
       <div className="flex-1 min-w-[200px]">
-        <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Generation</label>
-        <Select value={String(generation)} onValueChange={(v) => onGenerationChange(parseInt(v))}>
-          <SelectTrigger data-testid="select-generation" className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {GENERATIONS.map(gen => (
-              <SelectItem key={gen.id} value={String(gen.id)}>
-                {gen.name} — {gen.region}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="flex-1 min-w-[200px]">
         <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Game</label>
-        <Select value={game} onValueChange={onGameChange}>
+        <Select value={game} onValueChange={handleGameChange}>
           <SelectTrigger data-testid="select-game" className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {currentGen.games.map(g => (
-              <SelectItem key={g.id} value={g.id}>
-                {g.name}
-              </SelectItem>
+            {GENERATIONS.map(gen => (
+              <SelectGroup key={gen.id}>
+                <SelectLabel>{gen.name} — {gen.region}</SelectLabel>
+                {gen.games.map(g => (
+                  <SelectItem key={g.id} value={g.id}>
+                    {g.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             ))}
           </SelectContent>
         </Select>
